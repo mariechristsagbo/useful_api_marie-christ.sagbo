@@ -73,4 +73,19 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class, 'receiver_id');
     }
 
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function ordersAsBuyer(): HasMany
+    {
+        return $this->hasMany(Order::class, 'buyer_id');
+    }
+
+    public function ordersAsSeller(): HasMany
+    {
+        return $this->hasMany(Order::class, 'seller_id');
+    }
+
 }
