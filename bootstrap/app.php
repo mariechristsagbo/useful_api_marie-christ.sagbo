@@ -13,7 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'module' => \App\Http\Middleware\CheckModuleActive::class,
+            'CheckModuleActive' => \App\Http\Middleware\CheckModuleActive::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

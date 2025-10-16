@@ -14,12 +14,26 @@ class CheckModuleActive
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $moduleName): Response
+    public function handle(Request $request, Closure $next, string $moduleName = null): Response
     {
         $user = $request->user();
         
         if (!$user) {
             return response()->json(['message' => 'Not authentificated'], 401);
+        }
+
+        if (!$moduleName) {
+            $hasActiveModule = $user->modules()
+                ->wherePivot('active', true)
+                ->exists();
+            
+            if (!$hasActiveModule) {
+                return response()->json([
+                    'message' => 'Aucun module actif.'
+                ], 403);
+            }
+            
+            return $next($request);
         }
 
         $module = Module::where('name', $moduleName)->first();

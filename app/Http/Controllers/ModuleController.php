@@ -50,6 +50,7 @@ class ModuleController extends Controller
         
         if (!$existingModule) {
             return response()->json([
+                'message' => 'Module not found'
             ], 404);
         }
 

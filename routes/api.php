@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\LinkController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
@@ -17,3 +19,17 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
 
+Route::middleware(['auth:sanctum', 'CheckModuleActive'])->group(function () {
+    Route::post('/shorten', [LinkController::class, 'shorten']);
+    Route::get('/links', [LinkController::class, 'index']);
+    Route::delete('/links/{id}', [LinkController::class, 'destroy']);
+});
+
+Route::get('/s/{code}', [LinkController::class, 'redirect']);
+
+Route::middleware(['auth:sanctum', 'CheckModuleActive'])->group(function () {
+    Route::get('/wallet', [WalletController::class, 'balance']);
+    Route::post('/wallet/transfer', [WalletController::class, 'transfer']);
+    Route::post('/wallet/topup', [WalletController::class, 'topup']);
+    Route::get('/wallet/transactions', [WalletController::class, 'transactions']);
+});

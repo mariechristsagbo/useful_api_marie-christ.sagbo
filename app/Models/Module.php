@@ -15,7 +15,7 @@ class Module extends Model
 //tout les utilisateurs qui ont accès au module(relation many to many)
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'module_user')
+        return $this->belongsToMany(User::class, 'user_modules')
                     ->withPivot('active')
                     ->withTimestamps();
     }
