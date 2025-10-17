@@ -2,8 +2,34 @@
   <div class="flex h-[700px] w-full">
     <div class="w-full flex flex-col items-center justify-center">
       <form class="md:w-96 w-80 flex flex-col items-center justify-center">
-        <h2 class="text-4xl text-gray-900 font-medium">Sign in</h2>
-        <p class="text-sm text-gray-500/90 mt-3 pb-6">Welcome back! Please sign in to continue</p>
+        <h2 class="text-4xl text-gray-900 font-medium">Sign up</h2>
+        <p class="text-sm text-gray-500/90 mt-3 pb-6">Create your account</p>
+
+        <div
+          class="flex items-center w-full bg-transparent border border-gray-300/60 h-12 rounded-full overflow-hidden pl-6 gap-2. mb-4"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-user-icon lucide-user"
+          >
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Name"
+            class="bg-transparent text-gray-500/80 placeholder-gray-500/80 outline-none text-sm w-full h-full"
+            required
+          />
+        </div>
 
         <div
           class="flex items-center w-full bg-transparent border border-gray-300/60 h-12 rounded-full overflow-hidden pl-6 gap-2"
@@ -53,23 +79,17 @@
           />
         </div>
 
-        <div class="w-full flex items-center justify-between mt-8 text-gray-500/80">
-          <div class="flex items-center gap-2">
-            <input class="h-5" type="checkbox" id="checkbox" />
-            <label class="text-sm" for="checkbox">Remember me</label>
-          </div>
-          <a class="text-sm underline" href="#">Forgot password?</a>
-        </div>
-
         <button
           type="submit"
           class="mt-8 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity"
         >
-          Login
+          Register
         </button>
         <p class="text-gray-500/90 text-sm mt-4">
-          Don’t have an account?
-          <router-link to="/register"><span class="hover:underline text-blue-600">Sign up</span></router-link>
+          Already have an account?
+          <router-link to="/"
+            ><span class="hover:underline text-blue-600">Sign in</span></router-link
+          >
         </p>
       </form>
     </div>
@@ -78,6 +98,6 @@
 
 <script>
 export default {
-  name: 'LoginForm',
+  name: 'SignupForm',
 }
 </script>
