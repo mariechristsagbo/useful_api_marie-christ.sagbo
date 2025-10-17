@@ -1,9 +1,13 @@
 <template>
   <div class="flex h-[700px] w-full">
     <div class="w-full flex flex-col items-center justify-center">
-      <form class="md:w-96 w-80 flex flex-col items-center justify-center">
+      <form @submit.prevent="handleLogin" class="md:w-96 w-80 flex flex-col items-center justify-center">
         <h2 class="text-4xl text-gray-900 font-medium">Sign in</h2>
         <p class="text-sm text-gray-500/90 mt-3 pb-6">Welcome back! Please sign in to continue</p>
+
+        <div v-if="error" class="w-full mb-4 p-3  text-red-700">
+          {{ error }}
+        </div>
 
         <div
           class="flex items-center w-full bg-transparent border border-gray-300/60 h-12 rounded-full overflow-hidden pl-6 gap-2"
@@ -23,6 +27,7 @@
             />
           </svg>
           <input
+            v-model="formData.email"
             type="email"
             placeholder="Email"
             class="bg-transparent text-gray-500/80 placeholder-gray-500/80 outline-none text-sm w-full h-full"
@@ -46,6 +51,7 @@
             />
           </svg>
           <input
+            v-model="formData.password"
             type="password"
             placeholder="Password"
             class="bg-transparent text-gray-500/80 placeholder-gray-500/80 outline-none text-sm w-full h-full"
@@ -63,12 +69,13 @@
 
         <button
           type="submit"
-          class="mt-8 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity"
+          :disabled="isLoading"
+          class="mt-8 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity disabled:opacity-50"
         >
-          Login
+          {{ isLoading ? 'Connexion...' : 'Login' }}
         </button>
         <p class="text-gray-500/90 text-sm mt-4">
-          Don’t have an account?
+          Don't have an account?
           <router-link to="/register"><span class="hover:underline text-blue-600">Sign up</span></router-link>
         </p>
       </form>
@@ -77,7 +84,31 @@
 </template>
 
 <script>
+import { useAuthStore } from '../stores/auth.js'
+import { mapState } from 'pinia'
+
 export default {
   name: 'LoginForm',
+  data() {
+    return {
+      formData: {
+        email: '',
+        password: ''
+      }
+    }
+  },
+  computed: {
+    ...mapState(useAuthStore, ['isLoading', 'error'])
+  },
+  methods: {
+    async handleLogin() {
+      const authStore = useAuthStore()
+      const result = await authStore.login(this.formData.email, this.formData.password)
+
+      if (result.success) {
+        this.$router.push('/dashboard')
+      }
+    }
+  }
 }
 </script>

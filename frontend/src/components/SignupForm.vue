@@ -1,12 +1,20 @@
 <template>
   <div class="flex h-[700px] w-full">
     <div class="w-full flex flex-col items-center justify-center">
-      <form class="md:w-96 w-80 flex flex-col items-center justify-center">
+      <form @submit.prevent="handleRegister" class="md:w-96 w-80 flex flex-col items-center justify-center">
         <h2 class="text-4xl text-gray-900 font-medium">Sign up</h2>
         <p class="text-sm text-gray-500/90 mt-3 pb-6">Create your account</p>
 
+        <div v-if="error" class="w-full mb-4 p-3 text-red-700">
+          {{ error }}
+        </div>
+
+        <div v-if="success" class="w-full mb-4 p-3 text-green-700">
+          {{ success }}
+        </div>
+
         <div
-          class="flex items-center w-full bg-transparent border border-gray-300/60 h-12 rounded-full overflow-hidden pl-6 gap-2. mb-4"
+          class="flex items-center w-full bg-transparent border border-gray-300/60 h-12 rounded-full overflow-hidden pl-6 gap-2 mb-4"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -24,6 +32,7 @@
             <circle cx="12" cy="7" r="4" />
           </svg>
           <input
+            v-model="formData.name"
             type="text"
             placeholder="Name"
             class="bg-transparent text-gray-500/80 placeholder-gray-500/80 outline-none text-sm w-full h-full"
@@ -49,6 +58,7 @@
             />
           </svg>
           <input
+            v-model="formData.email"
             type="email"
             placeholder="Email"
             class="bg-transparent text-gray-500/80 placeholder-gray-500/80 outline-none text-sm w-full h-full"
@@ -72,6 +82,7 @@
             />
           </svg>
           <input
+            v-model="formData.password"
             type="password"
             placeholder="Password"
             class="bg-transparent text-gray-500/80 placeholder-gray-500/80 outline-none text-sm w-full h-full"
@@ -81,9 +92,10 @@
 
         <button
           type="submit"
-          class="mt-8 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity"
+          :disabled="isLoading"
+          class="mt-8 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity disabled:opacity-50"
         >
-          Register
+          {{ isLoading ? 'Inscription...' : 'Register' }}
         </button>
         <p class="text-gray-500/90 text-sm mt-4">
           Already have an account?
@@ -97,7 +109,42 @@
 </template>
 
 <script>
+import { useAuthStore } from '../stores/auth.js'
+import { mapState } from 'pinia'
+
 export default {
   name: 'SignupForm',
+  data() {
+    return {
+      formData: {
+        name: '',
+        email: '',
+        password: ''
+      },
+      success: ''
+    }
+  },
+  computed: {
+    ...mapState(useAuthStore, ['isLoading', 'error'])
+  },
+  methods: {
+    async handleRegister() {
+      const authStore = useAuthStore()
+      this.success = ''
+
+      const result = await authStore.register(
+        this.formData.name,
+        this.formData.email,
+        this.formData.password
+      )
+
+      if (result.success) {
+        this.success = 'Inscription réussie !'
+        setTimeout(() => {
+          this.$router.push('/dashboard')
+        }, 2000)
+      }
+    }
+  }
 }
 </script>
